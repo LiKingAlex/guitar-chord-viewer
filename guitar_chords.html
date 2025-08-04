@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guitar Chords</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+        }
+        .chord-diagram {
+            width: 150px;
+            height: 200px;
+            background-color: #2d3748; /* Slightly lighter dark background */
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .fretboard-svg {
+            width: 100%;
+            height: 100%;
+        }
+        .fretboard-svg .string, .fretboard-svg .fret {
+            stroke: #cbd5e0; /* Light gray for strings and frets */
+            stroke-width: 1;
+        }
+        .fretboard-svg .open-string, .fretboard-svg .muted-string {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            fill: #e2e8f0; /* Light text */
+        }
+        .fretboard-svg .muted-string {
+            fill: #9a9a9a; /* Gray for muted */
+        }
+        .fretboard-svg .finger-dot {
+            fill: #63b3ed; /* A nice blue color for finger dots */
+            stroke: #4299e1;
+            stroke-width: 2;
+        }
+        .fretboard-svg .nut {
+            fill: none;
+            stroke: #cbd5e0;
+            stroke-width: 4;
+        }
+    </style>
+</head>
+<body class="p-8">
+
+    <main class="container mx-auto">
+        <h1 class="text-4xl font-bold text-center mb-8">Essential Guitar Chords</h1>
+        <p class="text-center text-lg mb-12 max-w-2xl mx-auto">
+            Explore and learn the main open-position guitar chords. Each diagram shows the fretboard, with dots indicating where to place your fingers. A circle at the top means the string is played open, while an 'x' means it is muted.
+        </p>
+        <div id="chords-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+            <!-- Chord diagrams will be rendered here by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        // All JavaScript logic for generating and rendering chords
+        window.onload = () => {
+            const chordsData = [
+                {
+                    name: "C Major",
+                    fingering: [
+                        { string: 1, fret: 3, finger: 3 }, // A string, 3rd fret, ring finger
+                        { string: 2, fret: 2, finger: 2 }, // D string, 2nd fret, middle finger
+                        { string: 4, fret: 1, finger: 1 }  // B string, 1st fret, index finger
+                    ],
+                    tuning: ['x', 'o', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                },
+                {
+                    name: "G Major",
+                    fingering: [
+                        { string: 0, fret: 3, finger: 3 }, // Low E string, 3rd fret, ring finger
+                        { string: 1, fret: 2, finger: 2 }, // A string, 2nd fret, middle finger
+                        { string: 5, fret: 3, finger: 4 }  // High E string, 3rd fret, pinky finger
+                    ],
+                    tuning: ['o', 'o', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                },
+                {
+                    name: "A Major",
+                    fingering: [
+                        { string: 2, fret: 2, finger: 1 }, // D string, 2nd fret, index finger
+                        { string: 3, fret: 2, finger: 2 }, // G string, 2nd fret, middle finger
+                        { string: 4, fret: 2, finger: 3 }  // B string, 2nd fret, ring finger
+                    ],
+                    tuning: ['x', 'o', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                },
+                {
+                    name: "D Major",
+                    fingering: [
+                        { string: 3, fret: 2, finger: 1 }, // G string, 2nd fret, index finger
+                        { string: 4, fret: 3, finger: 3 }, // B string, 3rd fret, ring finger
+                        { string: 5, fret: 2, finger: 2 }  // High E string, 2nd fret, middle finger
+                    ],
+                    tuning: ['x', 'x', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                },
+                {
+                    name: "E Major",
+                    fingering: [
+                        { string: 1, fret: 2, finger: 2 }, // A string, 2nd fret, middle finger
+                        { string: 2, fret: 2, finger: 3 }, // D string, 2nd fret, ring finger
+                        { string: 3, fret: 1, finger: 1 }  // G string, 1st fret, index finger
+                    ],
+                    tuning: ['o', 'o', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                },
+                {
+                    name: "A Minor",
+                    fingering: [
+                        { string: 1, fret: 2, finger: 2 }, // A string, 2nd fret, middle finger
+                        { string: 2, fret: 2, finger: 3 }, // D string, 2nd fret, ring finger
+                        { string: 4, fret: 1, finger: 1 }  // B string, 1st fret, index finger
+                    ],
+                    tuning: ['x', 'o', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                },
+                {
+                    name: "E Minor",
+                    fingering: [
+                        { string: 1, fret: 2, finger: 2 }, // A string, 2nd fret, middle finger
+                        { string: 2, fret: 2, finger: 3 }  // D string, 2nd fret, ring finger
+                    ],
+                    tuning: ['o', 'o', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                },
+                {
+                    name: "D Minor",
+                    fingering: [
+                        { string: 3, fret: 2, finger: 2 }, // G string, 2nd fret, middle finger
+                        { string: 4, fret: 3, finger: 3 }, // B string, 3rd fret, ring finger
+                        { string: 5, fret: 1, finger: 1 }  // High E string, 1st fret, index finger
+                    ],
+                    tuning: ['x', 'x', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                },
+                {
+                    name: "F Major",
+                    fingering: [
+                        { string: 0, fret: 1, finger: 1 }, // Low E string, 1st fret, barre
+                        { string: 1, fret: 3, finger: 3 }, // A string, 3rd fret, ring finger
+                        { string: 2, fret: 3, finger: 4 }, // D string, 3rd fret, pinky finger
+                        { string: 3, fret: 2, finger: 2 }, // G string, 2nd fret, middle finger
+                        { string: 4, fret: 1, finger: 1 }, // B string, 1st fret, barre
+                        { string: 5, fret: 1, finger: 1 }  // High E string, 1st fret, barre
+                    ],
+                    tuning: ['o', 'o', 'o', 'o', 'o', 'o'],
+                    startFret: 1
+                }
+            ];
+
+            const container = document.getElementById('chords-container');
+
+            /**
+             * Generates an SVG string for a guitar chord diagram.
+             * @param {Object} chordData - The chord data to render.
+             * @param {string} chordData.name - The name of the chord.
+             * @param {Array<Object>} chordData.fingering - An array of objects with string, fret, and finger number.
+             * @param {Array<string>} chordData.tuning - Array of 'o' (open), 'x' (muted), or 'n' (not played).
+             * @param {number} chordData.startFret - The starting fret number.
+             * @returns {string} The complete SVG string.
+             */
+            function createChordDiagram(chordData) {
+                const svgWidth = 150;
+                const svgHeight = 200;
+                const diagramWidth = 120;
+                const diagramHeight = 140;
+                const diagramX = (svgWidth - diagramWidth) / 2;
+                const diagramY = 30;
+
+                const strings = 6;
+                const frets = 5;
+
+                const stringSpacing = diagramWidth / (strings - 1);
+                const fretSpacing = diagramHeight / frets;
+
+                let svgContent = `<svg class="fretboard-svg" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
+
+                // Draw the fretboard rectangle
+                svgContent += `<rect x="${diagramX}" y="${diagramY}" width="${diagramWidth}" height="${diagramHeight}" fill="none" stroke="#cbd5e0" stroke-width="2" />`;
+
+                // Draw frets
+                for (let i = 1; i <= frets; i++) {
+                    const y = diagramY + i * fretSpacing;
+                    svgContent += `<line class="fret" x1="${diagramX}" y1="${y}" x2="${diagramX + diagramWidth}" y2="${y}" />`;
+                }
+
+                // Draw strings
+                for (let i = 0; i < strings; i++) {
+                    const x = diagramX + i * stringSpacing;
+                    svgContent += `<line class="string" x1="${x}" y1="${diagramY}" x2="${x}" y2="${diagramY + diagramHeight}" />`;
+                }
+                
+                // Draw nut if starting on fret 1
+                if (chordData.startFret === 1) {
+                     svgContent += `<line class="nut" x1="${diagramX}" y1="${diagramY}" x2="${diagramX + diagramWidth}" y2="${diagramY}" />`;
+                }
+
+                // Draw tuning labels (open/muted)
+                for (let i = 0; i < strings; i++) {
+                    const x = diagramX + i * stringSpacing;
+                    const y = diagramY - 10;
+                    // Check if the string is fretted to avoid drawing 'o' or 'x' on fretted strings
+                    const isFretted = chordData.fingering.some(f => f.string === i && f.fret > 0);
+                    if (!isFretted && chordData.tuning) {
+                        if (chordData.tuning[i] === 'o') {
+                            svgContent += `<circle class="open-string" cx="${x}" cy="${y}" r="4" fill="none" stroke="#e2e8f0" stroke-width="2" />`;
+                        } else if (chordData.tuning[i] === 'x') {
+                            svgContent += `<text class="muted-string" x="${x}" y="${y+5}" text-anchor="middle">x</text>`;
+                        }
+                    }
+                }
+
+                // Draw finger dots
+                chordData.fingering.forEach(finger => {
+                    const stringIndex = finger.string;
+                    const dotX = diagramX + stringIndex * stringSpacing;
+                    const dotY = diagramY + (finger.fret - chordData.startFret) * fretSpacing + fretSpacing / 2;
+                    svgContent += `<circle class="finger-dot" cx="${dotX}" cy="${dotY}" r="8" />`;
+                    if (finger.finger) {
+                        svgContent += `<text x="${dotX}" y="${dotY + 4}" font-size="10" text-anchor="middle" fill="#e2e8f0" font-weight="bold">${finger.finger}</text>`;
+                    }
+                });
+
+                // Add chord name text
+                svgContent += `<text x="${svgWidth / 2}" y="15" font-size="20" font-weight="bold" text-anchor="middle" fill="#e2e8f0">${chordData.name}</text>`;
+
+                svgContent += `</svg>`;
+                return svgContent;
+            }
+
+            /**
+             * Renders all chord diagrams to the container.
+             */
+            function renderChords() {
+                chordsData.forEach(chord => {
+                    const diagramContainer = document.createElement('div');
+                    diagramContainer.className = 'chord-diagram p-4 flex flex-col items-center justify-center';
+                    diagramContainer.innerHTML = createChordDiagram(chord);
+                    container.appendChild(diagramContainer);
+                });
+            }
+
+            renderChords();
+        };
+    </script>
+</body>
+</html>
